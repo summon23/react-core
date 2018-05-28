@@ -21,7 +21,6 @@ router.get('/list', Promise.coroutine(function* (req, res) {
 }));
 
 router.post('/create', Promise.coroutine(function* (req, res) {
-    console.log("**",req.body);
     const { product_name, product_price ,qty} = req.body;
     const dataToInsert = {
         product_name,

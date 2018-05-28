@@ -16,4 +16,11 @@ exports.findAll = function (){
     });
 };
 
+exports.findOne = function (where){
+    const model = DB.getInstance();
+    return model.User.findOne({
+       where
+    });
+};
+
 module.exports = exports;
