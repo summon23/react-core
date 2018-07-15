@@ -1,11 +1,22 @@
 'use strict';
+const ENDPOINT = '/update';
+const METHODTYPE = 'PUT';
 
 const ProductRepo = require('../../repositories/product');
 const Promise = require('bluebird');
+const { verifyJWTMiddleware } = require('../../middleware/auth');
 
-exports.updateProduct = Promise.coroutine(function* (id, data){
+const updateProduct = Promise.coroutine(function* (req, res, next){
+    const { product_name, product_price, qty} = req.body.dataToUpdate;
+    const id = req.body.id;
+    const dataToUpdate = {
+        product_name,
+        product_price: Number(product_price),
+        qty: Number(qty)
+    };
+
     try {
-        yield ProductRepo.update(id, data);
+        yield ProductRepo.update(id, dataToUpdate);
         return {
             status: true,
             message: 'Product Updated'
@@ -18,4 +29,13 @@ exports.updateProduct = Promise.coroutine(function* (id, data){
     }
 });
 
-module.exports = exports;
+const MIDDLEWARE = function(req, res, next) {
+    next();
+};
+
+module.exports = {
+    ENDPOINT,
+    METHODTYPE,
+    MAINFUNCTION: updateProduct,
+    MIDDLEWARE: verifyJWTMiddleware
+};

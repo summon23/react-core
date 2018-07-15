@@ -1,6 +1,7 @@
 const state = {
     productState: [],
-    formState: []
-}
+    formState: [],
+    userState: []
+};
 
 export default state;

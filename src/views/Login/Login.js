@@ -1,8 +1,55 @@
+'use strict';
+
 import React, {Component} from 'react';
 import {Container, Row, Col, CardGroup, Card, CardBody, Button, Input, InputGroup, InputGroupAddon, InputGroupText} from 'reactstrap';
-
+import { connect } from 'react-redux';
+import { authLogin } from '../../action/authAction';
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+} from "react-router-dom";
+import {
+    history
+} from '../../helper/history';
 
 class Login extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: null,
+            password: null
+        };
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        console.log("[state]", this.state);
+        const data = {
+            username: this.state.username,
+            password: this.state.password
+        };
+
+        this.props.onAuthUser(data)
+            .then((res) => {
+                console.log("res", res);
+                if(res.response.status === true) {
+                    console.log("redirectiiinggg...");
+                    history.push('#/product/list', { some: "state" });
+                    // return (
+                    //     <Redirect to="/product/list"/>
+                    // )
+                }
+            })
+            .catch((err) => {
+               console.log("err", err);
+            });
+    }
+
     render() {
         return (
             <div className="app flex-row align-items-center">
@@ -20,7 +67,7 @@ class Login extends Component {
                                                     <i className="icon-user"></i>
                                                 </InputGroupText>
                                             </InputGroupAddon>
-                                            <Input type="text" placeholder="Username"/>
+                                            <Input type="text" placeholder="Username" name="username" onChange={(e) => this.setState({username: e.target.value})}/>
                                         </InputGroup>
                                         <InputGroup className="mb-4">
                                             <InputGroupAddon addonType="prepend">
@@ -28,11 +75,11 @@ class Login extends Component {
                                                     <i className="icon-lock"></i>
                                                 </InputGroupText>
                                             </InputGroupAddon>
-                                            <Input type="password" placeholder="Password"/>
+                                            <Input type="password" placeholder="Password" name="password" onChange={(e) => this.setState({password: e.target.value})}/>
                                         </InputGroup>
                                         <Row>
                                             <Col xs="6">
-                                                <Button color="primary" className="px-4">Login</Button>
+                                                <Button color="primary" className="px-4" onClick={this.handleSubmit}>Login</Button>
                                             </Col>
                                             <Col xs="6" className="text-right">
                                                 <Button color="link" className="px-0">Forgot password?</Button>
@@ -59,4 +106,15 @@ class Login extends Component {
     }
 }
 
-export default Login;
+function mapStateToProps(state, ownProps) {
+    return {
+        userInfo: state.authState
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        onAuthUser: (data) => dispatch(authLogin(data))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

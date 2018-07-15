@@ -29,6 +29,11 @@ export default {
               icon: 'icon-puzzle'
           }
         ]
+    },
+    {
+        name: 'Login',
+        url: '/login',
+        icon: 'icon-user'
     }
   ]
 };
