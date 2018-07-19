@@ -5,10 +5,12 @@
  */
 
 const DB = require('../modules/Database');
+const Mongo = require('../modules/MongoContext');
 const path = require('path');
 
 // Initialize The ORM
 DB.getContext();
+Mongo.getContext();
 
 exports.registerMethod = function(app) {
     const methodName = [

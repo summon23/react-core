@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const Promise = require('bluebird');
 const Sequelize = require('sequelize');
+const mongodb = require('mongodb');
 const modelPath = './model';
 const Helper = require('../../utils/helper');
 
